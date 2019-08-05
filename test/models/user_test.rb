@@ -49,6 +49,22 @@ class UserTest < ActiveSupport::TestCase
     end 
   end
 
+  test "should reject non-unique email addresses" do
+    duplicate_user = @user.dup
+    duplicate_user.email.upcase!
+    @user.save
+    assert_not duplicate_user.valid? 
+  end
+
+  test "should downcase email before saving to database" do
+    upcase_email = "EXAMPLE@EXAMPLE.COM"
+    @user.email = upcase_email
+    @user.save
+    assert_equal @user.reload.email, upcase_email.downcase
+  end
+
+
+
 
 
 
